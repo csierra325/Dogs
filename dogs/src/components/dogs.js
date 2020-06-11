@@ -1,69 +1,69 @@
 import React from 'react'
 
 class Dogs extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             input: '',
-            Dogs: [],
+            dogs: [],
+            filterDogs: [],
         }
     }
 
 
     handleInput = (e) => {
         const input = e.target.value
-        this.setState(()=>({
+        this.setState(() => ({
             input
         }))
     }
 
     handleSubmit = () => {
         fetch('https://dog.ceo/api/breeds/list/all')
-        .then((response) => {
-           return response.json()
-        })
-        .then((data) => {
-            debugger
-            const dogList = [];
-            for (const species in data.message) {
-
-                if (data.message[species].length === 0){
-                    dogList.push(species)
-
-                }else{
-                    const array = data.message[species]
-
-                    array.forEach(subspecies => {
-                        dogList.push(`${species} ${subspecies}`)
-                    });
-                   
-                }
-            }
-            this.setState(() => ({
-                Dogs: dogList
-            }))
-            const filterDogList = dogList.filter((filterDogs)=>{
-                    
-                return filterDogs.includes(`${this.state.input}`)
+            .then((response) => {
+                return response.json()
             })
-        });
+            .then((data) => {
+                const dogList = [];
+
+                for (const species in data.message) {
+
+                    if (data.message[species].length === 0) {
+                        dogList.push(species)
+
+                    } else {
+                        const array = data.message[species]
+
+                        array.forEach(subspecies => {
+                            dogList.push(`${species} ${subspecies}`)
+                        });
+                    }
+                    this.setState(() => ({
+                        dogs: dogList,
+                    }))
+                }
+            });
     }
-        
 
-
-    render(){
-        return(  
+    render() {
+        return (
             <div>
-                <h1>Dog Breeds</h1> 
-                <input  
+                <h1>Dog Breeds</h1>
+                <input
                     type='text'
                     onChange={this.handleInput}
                     value={this.state.input}
                 />
                 <button onClick={this.handleSubmit}>Submit</button>
 
-                <div>{this.state.Dogs}</div>
+                <ul>
+                    {this.state.dogs.map((dog) => {
+                        return <li>{dog}</li>
+                    })}
+                </ul>
+
+                <div>{this.state.filter}</div>
             </div>
         )
     }
