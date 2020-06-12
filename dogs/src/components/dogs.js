@@ -6,6 +6,7 @@ class Dogs extends React.Component {
 
         this.state = {
             input: '',
+            filterDogImage: '',
             dogs: [],
             filterDogs: [],
         }
@@ -24,7 +25,7 @@ class Dogs extends React.Component {
                     } else {
                         const array = data.message[species]
                         array.forEach(subspecies => {
-                            dogList.push(`${subspecies}${species}`)
+                            dogList.push(`${subspecies} ${species}`)
                         });
                     }
                     this.setState(() => ({
@@ -40,12 +41,26 @@ class Dogs extends React.Component {
         })
     }
 
+    getFilteredImg = () => {
+        fetch(`https://dog.ceo/api/breed/${this.state.filterDogs}/images/random`)
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data.message)
+            this.setState(() => ({
+                filterDogImage: data.message
+            }))
+        })
+    }
+
     handleInput = (e) => {
         const input = e.target.value
         this.setState(() => ({
             input,
             filterDogs: this.filterDogList(input),
         }))
+        this.getFilteredImg()
     }
 
     render() {
@@ -60,6 +75,8 @@ class Dogs extends React.Component {
                 {this.state.filterDogs.map((dog) => {
                     return <div>{dog}</div>
                 })}
+                <img src={this.state.filterDogImage} alt="dog" />
+
             </div>
         )
     }
