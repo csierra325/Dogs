@@ -11,32 +11,20 @@ class Dogs extends React.Component {
         }
     }
 
-
-    handleInput = (e) => {
-        const input = e.target.value
-        this.setState(() => ({
-            input
-        }))
-    }
-
-    handleSubmit = () => {
+    componentDidMount = () => {
         fetch('https://dog.ceo/api/breeds/list/all')
             .then((response) => {
                 return response.json()
             })
             .then((data) => {
                 const dogList = [];
-
                 for (const species in data.message) {
-
                     if (data.message[species].length === 0) {
                         dogList.push(species)
-
                     } else {
                         const array = data.message[species]
-
                         array.forEach(subspecies => {
-                            dogList.push(`${species} ${subspecies}`)
+                            dogList.push(`${subspecies}${species}`)
                         });
                     }
                     this.setState(() => ({
@@ -44,6 +32,20 @@ class Dogs extends React.Component {
                     }))
                 }
             });
+    }
+
+    filterDogList = (filter) => {
+        return this.state.dogs.filter((dog) => {
+            return dog.includes(filter)
+        })
+    }
+
+    handleInput = (e) => {
+        const input = e.target.value
+        this.setState(() => ({
+            input,
+            filterDogs: this.filterDogList(input),
+        }))
     }
 
     render() {
@@ -55,15 +57,9 @@ class Dogs extends React.Component {
                     onChange={this.handleInput}
                     value={this.state.input}
                 />
-                <button onClick={this.handleSubmit}>Submit</button>
-
-                <ul>
-                    {this.state.dogs.map((dog) => {
-                        return <li>{dog}</li>
-                    })}
-                </ul>
-
-                <div>{this.state.filter}</div>
+                {this.state.filterDogs.map((dog) => {
+                    return <div>{dog}</div>
+                })}
             </div>
         )
     }
