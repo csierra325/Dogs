@@ -1,0 +1,27 @@
+.dog-container{
+    text-align: center;
+    background: #eee;
+    max-width: 1200px;
+    padding: 80px;
+}
+.dog-header{
+    font-size: 40px;
+    font-weight: bold;
+}
+.dog-name {
+    padding: 10px;
+    color: #525252;
+    font-weight: bold;
+    font-size: 14px;
+    border: 2px solid #2b2a2a;
+    border-radius: 5px;
+}
+.dog-results{
+    max-width: 1100px;
+    padding: 45px;
+}
+.dog-subheader{
+    font-size: 20px;
+    font-weight: 600;
+    padding: 14px
+}

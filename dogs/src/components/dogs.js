@@ -1,4 +1,5 @@
 import React from 'react'
+import './dogs.css';
 
 class Dogs extends React.Component {
     constructor(props) {
@@ -7,6 +8,8 @@ class Dogs extends React.Component {
         this.state = {
             input: '',
             filterDogImage: '',
+            subspecies: '',
+            species: '',
             dogs: [],
             filterDogs: [],
         }
@@ -41,13 +44,15 @@ class Dogs extends React.Component {
         })
     }
 
-    getFilteredImg = () => {
+    getFilteredImg = (dog) => {
+        console.log(this.state.dogList)
         fetch(`https://dog.ceo/api/breed/${this.state.filterDogs}/images/random`)
         .then((response) => {
             return response.json()
         })
         .then((data) => {
             console.log(data.message)
+
             this.setState(() => ({
                 filterDogImage: data.message
             }))
@@ -60,23 +65,28 @@ class Dogs extends React.Component {
             input,
             filterDogs: this.filterDogList(input),
         }))
+
         this.getFilteredImg()
     }
 
     render() {
         return (
-            <div>
-                <h1>Dog Breeds</h1>
+            <div className="dog-container">
+                <div className="dog-header">Dog Breeds</div>
+                <div className="dog-subheader">Type your favorite dog breed below</div>
                 <input
                     type='text'
                     onChange={this.handleInput}
                     value={this.state.input}
                 />
-                {this.state.filterDogs.map((dog) => {
-                    return <div>{dog}</div>
-                })}
-                <img src={this.state.filterDogImage} alt="dog" />
-
+                <div className="dog-results">
+                    {this.state.filterDogs.map((dog) => {
+                        return <button  className="dog-name" id={dog} value={dog}>{dog}</button>
+                    })}
+                  <div>
+                    <img className="dog-img" src={this.state.filterDogImage} alt="" />
+                  </div> 
+                </div>
             </div>
         )
     }
